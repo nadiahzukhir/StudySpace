@@ -1,7 +1,164 @@
-
 {% extends "base.html" %}
 
 {% block content %}
-<h1>Dashboard</h1>
-<p>Welcome to StudySpace!</p>
+
+<!-- A. Dashboard header -->
+<header class="page-header">
+    <h1>Dashboard</h1>
+    <p class="page-subtitle">
+        Welcome to StudySpace! Here's an overview of your academic activities.
+    </p>
+    <!-- Filled in by the small script at the bottom of this page -->
+    <p class="page-date" id="today-date"></p>
+</header>
+
+
+<!-- B. Statistics cards (values come from dashboard.py) -->
+<section class="stats-grid">
+
+    <a class="stat-card stat-courses" href="/courses">
+        <div class="stat-icon">
+            <svg viewBox="0 0 24 24" aria-hidden="true">
+                <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/>
+                <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/>
+            </svg>
+        </div>
+        <div>
+            <p class="stat-label">Total Courses</p>
+            <p class="stat-value">{{ total_courses }}</p>
+        </div>
+    </a>
+
+    <a class="stat-card stat-total" href="/tasks">
+        <div class="stat-icon">
+            <svg viewBox="0 0 24 24" aria-hidden="true">
+                <line x1="8" y1="6" x2="21" y2="6"/>
+                <line x1="8" y1="12" x2="21" y2="12"/>
+                <line x1="8" y1="18" x2="21" y2="18"/>
+                <line x1="3" y1="6" x2="3.01" y2="6"/>
+                <line x1="3" y1="12" x2="3.01" y2="12"/>
+                <line x1="3" y1="18" x2="3.01" y2="18"/>
+            </svg>
+        </div>
+        <div>
+            <p class="stat-label">Total Tasks</p>
+            <p class="stat-value">{{ total_tasks }}</p>
+        </div>
+    </a>
+
+    <div class="stat-card stat-pending">
+        <div class="stat-icon">
+            <svg viewBox="0 0 24 24" aria-hidden="true">
+                <circle cx="12" cy="12" r="10"/>
+                <polyline points="12 6 12 12 16 14"/>
+            </svg>
+        </div>
+        <div>
+            <p class="stat-label">Pending Tasks</p>
+            <p class="stat-value">{{ pending_tasks }}</p>
+        </div>
+    </div>
+
+    <div class="stat-card stat-completed">
+        <div class="stat-icon">
+            <svg viewBox="0 0 24 24" aria-hidden="true">
+                <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/>
+                <polyline points="22 4 12 14.01 9 11.01"/>
+            </svg>
+        </div>
+        <div>
+            <p class="stat-label">Completed Tasks</p>
+            <p class="stat-value">{{ completed_tasks }}</p>
+        </div>
+    </div>
+
+</section>
+
+
+<!-- C. Task completion progress -->
+<section class="panel">
+    <div class="progress-top">
+        <h2>Task Completion</h2>
+        <span class="progress-percent">{{ completion_rate }}%</span>
+    </div>
+
+    <!-- The bar width is set from the Python value (capped at 100) -->
+    <div class="progress-track"
+         role="progressbar"
+         aria-valuemin="0"
+         aria-valuemax="100"
+         aria-valuenow="{{ completion_rate }}">
+        <div class="progress-fill"
+             style="width: {{ [completion_rate, 100] | min }}%;"></div>
+    </div>
+
+    <p class="progress-text">
+        {{ completed_tasks }} of {{ total_tasks }} tasks completed
+    </p>
+</section>
+
+
+<!-- D and E. Deadlines (side by side on desktop) -->
+<section class="deadline-grid">
+
+    <!-- D. Upcoming deadlines -->
+    <div class="panel">
+        <div class="deadline-heading">
+            <h2>Upcoming Deadlines</h2>
+            <a href="/tasks" aria-label="View all upcoming deadlines">View All</a>
+        </div>
+
+        {% if upcoming_tasks %}
+            <ul class="task-list">
+                {% for task in upcoming_tasks %}
+                    <li class="task-item">
+                        <div>
+                            <p class="task-title">{{ task.title }}</p>
+                            <p class="task-meta">Due: {{ task.deadline }}</p>
+                        </div>
+                        <span class="course-badge">{{ task.code }}</span>
+                    </li>
+                {% endfor %}
+            </ul>
+        {% else %}
+            <p class="empty-state">
+                No upcoming deadlines! Enjoy the breathing room.
+            </p>
+        {% endif %}
+    </div>
+
+    <!-- E. Overdue tasks (warning colour) -->
+    <div class="panel">
+        <div class="deadline-heading">
+            <h2>Overdue Tasks</h2>
+            <a href="/tasks" aria-label="View all overdue tasks">View All</a>
+        </div>
+
+        {% if overdue_tasks %}
+            <ul class="task-list">
+                {% for task in overdue_tasks %}
+                    <li class="task-item task-overdue">
+                        <div>
+                            <p class="task-title">{{ task.title }}</p>
+                            <p class="task-meta">Due: {{ task.deadline }}</p>
+                        </div>
+                        <span class="course-badge">{{ task.code }}</span>
+                    </li>
+                {% endfor %}
+            </ul>
+        {% else %}
+            <p class="empty-state">No overdue tasks!</p>
+        {% endif %}
+    </div>
+
+</section>
+
+
+<script>
+    // Show today's date in the header (dashboard.py does not pass a date)
+    var options = { weekday: "long", year: "numeric", month: "long", day: "numeric" };
+    document.getElementById("today-date").textContent =
+        new Date().toLocaleDateString("en-US", options);
+</script>
+
 {% endblock %}
