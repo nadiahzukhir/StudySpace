@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -10,15 +9,70 @@
 </head>
 <body>
 
-    <nav>
-        <h2>StudySpace</h2>
-        <a href="/">Dashboard</a>
-        <a href="/courses">Courses</a>
-        <a href="/notes">Notes</a>
-        <a href="/tasks">Tasks</a>
-    </nav>
+    {# Current URL path, used below to highlight the active page #}
+    {% set path = request.path %}
 
-    <main>
+    <!-- Fixed left sidebar (shared by every page) -->
+    <aside class="sidebar">
+
+        <a class="sidebar-brand" href="/">
+            <span class="sidebar-logo">S</span>
+            <span class="sidebar-name">StudySpace</span>
+        </a>
+
+        <nav class="sidebar-nav">
+
+            <a href="/"
+               class="sidebar-link {% if path == '/' %}active{% endif %}"
+               {% if path == '/' %}aria-current="page"{% endif %}>
+                <svg viewBox="0 0 24 24" aria-hidden="true">
+                    <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/>
+                    <polyline points="9 22 9 12 15 12 15 22"/>
+                </svg>
+                Dashboard
+            </a>
+
+            <a href="/courses"
+               class="sidebar-link {% if path.startswith('/courses') %}active{% endif %}"
+               {% if path.startswith('/courses') %}aria-current="page"{% endif %}>
+                <svg viewBox="0 0 24 24" aria-hidden="true">
+                    <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/>
+                    <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/>
+                </svg>
+                Courses
+            </a>
+
+            <a href="/notes"
+               class="sidebar-link {% if path.startswith('/notes') %}active{% endif %}"
+               {% if path.startswith('/notes') %}aria-current="page"{% endif %}>
+                <svg viewBox="0 0 24 24" aria-hidden="true">
+                    <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+                    <polyline points="14 2 14 8 20 8"/>
+                    <line x1="16" y1="13" x2="8" y2="13"/>
+                    <line x1="16" y1="17" x2="8" y2="17"/>
+                </svg>
+                Notes
+            </a>
+
+            <a href="/tasks"
+               class="sidebar-link {% if path.startswith('/tasks') %}active{% endif %}"
+               {% if path.startswith('/tasks') %}aria-current="page"{% endif %}>
+                <svg viewBox="0 0 24 24" aria-hidden="true">
+                    <polyline points="9 11 12 14 22 4"/>
+                    <path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/>
+                </svg>
+                Tasks
+            </a>
+
+        </nav>
+    </aside>
+
+    <main class="main-content">
+        {% if path in ('/courses', '/notes', '/tasks') %}
+            <a class="dashboard-back-link" href="/">
+                <span aria-hidden="true">←</span> Back to Dashboard
+            </a>
+        {% endif %}
         {% block content %}{% endblock %}
     </main>
 

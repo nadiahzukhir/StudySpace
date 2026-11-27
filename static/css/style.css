@@ -1,26 +1,440 @@
+/* =========================================================
+   StudySpace - lavender and white theme
+   ========================================================= */
+
+/* ---------- Colours and sizes (change them here) ---------- */
+:root {
+    --bg: #faf9ff;              /* page background (very light lavender) */
+    --surface: #ffffff;         /* cards and sidebar */
+    --lavender: #7c6ee0;        /* main accent colour */
+    --lavender-soft: #efecff;   /* active link / hover background */
+    --lavender-line: #e6e2f5;   /* borders */
+    --text: #2b2840;
+    --text-muted: #6f6b86;
+
+    /* pastel card colours: background + icon colour */
+    --pastel-lavender: #ece8ff;  --pastel-lavender-ink: #6a5bd1;
+    --pastel-blue:     #e2effd;  --pastel-blue-ink:     #2f6fb5;
+    --pastel-amber:    #fff2da;  --pastel-amber-ink:    #b7791f;
+    --pastel-mint:     #dff4e8;  --pastel-mint-ink:     #2f8a5b;
+
+    /* overdue warning colours */
+    --warn-bg: #fdecee;
+    --warn-line: #e5798a;
+    --warn-ink: #b4364b;
+
+    --radius: 14px;
+    --shadow: 0 1px 3px rgba(60, 50, 120, 0.08);
+    --sidebar-width: 240px;
+}
+
+/* ---------- Base ---------- */
+* {
+    box-sizing: border-box;
+}
 
 body {
-    font-family: Arial, sans-serif;
+    font-family: "Segoe UI", system-ui, -apple-system, Roboto, Arial, sans-serif;
     margin: 0;
-    background-color: #f8f9fa;
+    background-color: var(--bg);
+    color: var(--text);
+    line-height: 1.5;
 }
 
-nav {
-    background-color: #ffffff;
-    padding: 20px;
-    border-bottom: 1px solid #ddd;
+h1, h2, h3 {
+    color: var(--text);
+    line-height: 1.25;
 }
 
-nav h2 {
-    margin-top: 0;
+a {
+    color: var(--lavender);
 }
 
-nav a {
-    margin-right: 20px;
-    color: #333;
+:focus-visible {
+    outline: 2px solid var(--lavender);
+    outline-offset: 2px;
+}
+
+/* ---------- Sidebar (from base.html) ---------- */
+.sidebar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    width: var(--sidebar-width);
+    background-color: var(--surface);
+    border-right: 1px solid var(--lavender-line);
+    padding: 24px 16px;
+    z-index: 10;
+}
+
+.sidebar-brand {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 0 8px 24px;
+    text-decoration: none;
+    color: var(--text);
+}
+
+.sidebar-logo {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 34px;
+    height: 34px;
+    border-radius: 10px;
+    background-color: var(--lavender);
+    color: #ffffff;
+    font-weight: 700;
+}
+
+.sidebar-name {
+    font-size: 1.15rem;
+    font-weight: 700;
+}
+
+.sidebar-nav {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.sidebar-link {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 10px 12px;
+    border-radius: 10px;
+    color: var(--text-muted);
+    text-decoration: none;
+    font-weight: 500;
+}
+
+.sidebar-link:hover {
+    background-color: var(--lavender-soft);
+    color: var(--text);
+}
+
+/* The page you are currently on */
+.sidebar-link.active {
+    background-color: var(--lavender-soft);
+    color: var(--lavender);
+    font-weight: 600;
+}
+
+/* Shared icon style (sidebar + stat cards) */
+.sidebar-link svg,
+.stat-icon svg {
+    width: 20px;
+    height: 20px;
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 2;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+    flex-shrink: 0;
+}
+
+/* ---------- Main content area ---------- */
+.main-content {
+    margin-left: var(--sidebar-width);   /* leave room for the sidebar */
+    padding: 40px;
+    max-width: 1200px;
+}
+
+.dashboard-back-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    margin-bottom: 12px;
+    padding: 4px 8px;
+    border-radius: 6px;
+    color: var(--pastel-lavender-ink);
+    font-size: 0.875rem;
+    font-weight: 600;
     text-decoration: none;
 }
 
-main {
-    padding: 30px;
+.dashboard-back-link:hover {
+    background-color: var(--lavender-soft);
+}
+
+/* ---------- Dashboard header ---------- */
+.page-header {
+    margin-bottom: 28px;
+}
+
+.page-header h1 {
+    margin: 0 0 6px;
+    font-size: 2rem;
+}
+
+.page-subtitle {
+    margin: 0;
+    color: var(--text-muted);
+}
+
+.page-date {
+    margin: 6px 0 0;
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: var(--lavender);
+}
+
+/* ---------- Statistics cards ---------- */
+.stats-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);   /* four in one row */
+    gap: 16px;
+    margin-bottom: 24px;
+}
+
+.stat-card {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    padding: 20px;
+    border-radius: var(--radius);
+    box-shadow: var(--shadow);
+}
+
+.stats-grid a.stat-card {
+    color: inherit;
+    text-decoration: none;
+}
+
+.stats-grid a.stat-card:hover {
+    box-shadow: 0 2px 6px rgba(60, 50, 120, 0.16);
+}
+
+.stat-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 42px;
+    height: 42px;
+    border-radius: 12px;
+    background-color: rgba(255, 255, 255, 0.7);
+}
+
+.stat-label {
+    margin: 0;
+    font-size: 0.85rem;
+    color: var(--text-muted);
+}
+
+.stat-value {
+    margin: 2px 0 0;
+    font-size: 1.8rem;
+    font-weight: 700;
+    line-height: 1.1;
+}
+
+/* One pastel colour per card */
+.stat-courses   { background-color: var(--pastel-lavender); }
+.stat-courses .stat-icon   { color: var(--pastel-lavender-ink); }
+.stat-total     { background-color: var(--pastel-blue); }
+.stat-total .stat-icon     { color: var(--pastel-blue-ink); }
+.stat-pending   { background-color: var(--pastel-amber); }
+.stat-pending .stat-icon   { color: var(--pastel-amber-ink); }
+.stat-completed { background-color: var(--pastel-mint); }
+.stat-completed .stat-icon { color: var(--pastel-mint-ink); }
+
+/* ---------- White panels (progress, deadlines) ---------- */
+.panel {
+    background-color: var(--surface);
+    border: 1px solid var(--lavender-line);
+    border-radius: var(--radius);
+    box-shadow: var(--shadow);
+    padding: 24px;
+    margin-bottom: 24px;
+}
+
+.panel h2 {
+    margin: 0 0 16px;
+    font-size: 1.1rem;
+}
+
+/* ---------- Progress bar ---------- */
+.progress-top {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+}
+
+.progress-top h2 {
+    margin-bottom: 12px;
+}
+
+.progress-percent {
+    font-size: 1.4rem;
+    font-weight: 700;
+    color: var(--lavender);
+}
+
+.progress-track {
+    height: 12px;
+    background-color: var(--lavender-soft);
+    border-radius: 999px;
+    overflow: hidden;
+}
+
+.progress-fill {
+    height: 100%;
+    background-color: var(--lavender);
+    border-radius: 999px;
+}
+
+.progress-text {
+    margin: 10px 0 0;
+    font-size: 0.9rem;
+    color: var(--text-muted);
+}
+
+/* ---------- Deadline lists ---------- */
+.deadline-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;   /* two columns on desktop */
+    gap: 24px;
+}
+
+.deadline-grid .panel {
+    margin-bottom: 0;
+}
+
+.deadline-heading {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 8px;
+    margin-bottom: 16px;
+}
+
+.deadline-heading h2 {
+    margin: 0;
+}
+
+.deadline-heading a {
+    color: var(--pastel-lavender-ink);
+    font-size: 0.85rem;
+    font-weight: 600;
+    white-space: nowrap;
+}
+
+.task-list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.task-item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    padding: 12px 14px;
+    border-radius: 10px;
+    background-color: var(--bg);
+    border-left: 4px solid var(--lavender);
+}
+
+.task-title {
+    margin: 0;
+    font-weight: 600;
+}
+
+.task-meta {
+    margin: 2px 0 0;
+    font-size: 0.85rem;
+    color: var(--text-muted);
+}
+
+.course-badge {
+    flex-shrink: 0;
+    padding: 4px 10px;
+    border-radius: 999px;
+    background-color: var(--lavender-soft);
+    color: var(--lavender);
+    font-size: 0.8rem;
+    font-weight: 600;
+}
+
+/* Overdue tasks use a soft red/rose instead of lavender */
+.task-overdue {
+    background-color: var(--warn-bg);
+    border-left-color: var(--warn-line);
+}
+
+.task-overdue .task-meta {
+    color: var(--warn-ink);
+}
+
+.task-overdue .course-badge {
+    background-color: #ffffff;
+    color: var(--warn-ink);
+}
+
+/* Friendly message when a list is empty */
+.empty-state {
+    margin: 0;
+    padding: 20px;
+    text-align: center;
+    border-radius: 10px;
+    background-color: var(--bg);
+    color: var(--text-muted);
+}
+
+/* ---------- Responsive layouts ---------- */
+
+/* Tablets: 2 stat cards per row, deadlines stacked */
+@media (max-width: 1100px) {
+    .stats-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .deadline-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+/* Phones: sidebar becomes a bar at the top of the page */
+@media (max-width: 768px) {
+    .sidebar {
+        position: static;
+        width: 100%;
+        border-right: none;
+        border-bottom: 1px solid var(--lavender-line);
+        padding: 14px 16px;
+    }
+
+    .sidebar-brand {
+        padding-bottom: 12px;
+    }
+
+    .sidebar-nav {
+        flex-direction: row;
+        overflow-x: auto;
+    }
+
+    .sidebar-link {
+        padding: 8px 12px;
+        white-space: nowrap;
+    }
+
+    .main-content {
+        margin-left: 0;
+        padding: 24px 16px;
+    }
+
+    .stats-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .page-header h1 {
+        font-size: 1.6rem;
+    }
 }
